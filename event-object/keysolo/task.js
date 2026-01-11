@@ -4,9 +4,9 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
-
+    this.timerElement = container.querySelector('.status__timer');
+    
     this.reset();
-
     this.registerEvents();
   }
 
@@ -17,18 +17,30 @@ class Game {
   }
 
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода символа вызываем this.success()
-      При неправильном вводе символа - this.fail();
-      DOM-элемент текущего символа находится в свойстве this.currentSymbol.
-     */
+    document.addEventListener('keydown', (event) => {
+      if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+        const currentSymbol = this.currentSymbol;
+        
+        if (!currentSymbol) {
+          return;
+        }
+
+        const expectedChar = currentSymbol.textContent;
+        const pressedChar = event.key;
+
+        if (expectedChar.toLowerCase() === pressedChar.toLowerCase()) {
+          this.success();
+        } else {
+          this.fail();
+        }
+      }
+    });
   }
 
   success() {
-    if(this.currentSymbol.classList.contains("symbol_current")) this.currentSymbol.classList.remove("symbol_current");
+    if(this.currentSymbol.classList.contains("symbol_current")) {
+      this.currentSymbol.classList.remove("symbol_current");
+    }
     this.currentSymbol.classList.add('symbol_correct');
     this.currentSymbol = this.currentSymbol.nextElementSibling;
 
@@ -37,25 +49,63 @@ class Game {
       return;
     }
 
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
     if (++this.winsElement.textContent === 10) {
       alert('Победа!');
       this.reset();
+    } else {
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   fail() {
-    if (++this.lossElement.textContent === 5) {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
+    if (++this.lossElement.textContent === 3) {
       alert('Вы проиграли!');
       this.reset();
+    } else {
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   setNewWord() {
-    const word = this.getWord();
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
 
+    const word = this.getWord();
     this.renderWord(word);
+    this.startTimer(word.length*2);
+  }
+
+  startTimer(wordLength) {
+    this.timeLeft = wordLength;
+
+    if (this.timerElement) {
+      this.timerElement.textContent = this.timeLeft;
+    }
+
+    this.timerInterval = setInterval(() => {
+      this.timeLeft--;
+      
+      if (this.timerElement) {
+        this.timerElement.textContent = this.timeLeft;
+      }
+      
+      if (this.timeLeft <= 0) {
+        clearInterval(this.timerInterval);
+        this.fail();
+      }
+    }, 1000);
   }
 
   getWord() {
@@ -90,5 +140,4 @@ class Game {
   }
 }
 
-new Game(document.getElementById('game'))
-
+new Game(document.getElementById('game'));
