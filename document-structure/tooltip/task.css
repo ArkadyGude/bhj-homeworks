@@ -23,7 +23,3 @@
 .tooltip_active {
   display: block;
 }
-
-.tooltip-clicked {
-  background: orange;
-}
