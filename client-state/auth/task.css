@@ -45,3 +45,32 @@
   display: block;
   text-align: center;
 }
+
+.error-message {
+  color: #ff3860;
+  background-color: #feecf0;
+  border: 1px solid #ff3860;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  display: none;
+  font-size: 14px;
+  text-align: center;
+}
+
+.error-message.active {
+  display: block;
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.logout-btn {
+  background-color: #ff3860;
+  width: 150px;
+  margin: 0;
+}

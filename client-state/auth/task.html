@@ -22,23 +22,27 @@
         <div class="card">
             <div class="signin signin_active" id="signin">
                 <h2 class="title">Вход</h2>
+                <div id="error-message" class="error-message"></div>
                 <form action="https://students.netoservices.ru/nestjs-backend/auth" id="signin__form">
                     <div class="row">
-                        <input type="text" name="login" class="control" placeholder="Логин">
+                        <input type="text" name="login" class="control" placeholder="Логин" required>
                     </div>
                     <div class="row">
-                        <input type="password" name="password" class="control" placeholder="Пароль">
+                        <input type="password" name="password" class="control" placeholder="Пароль" required>
                     </div>
                     <div class="row">
-                        <button class="btn" id="signin__btn">Войти</button>
+                        <button class="btn" id="signin__btn" type="submit">Войти</button>
                     </div>
                 </form>
             </div>
             <div class="welcome" id="welcome">
-                Добро пожаловать, пользователь #<span id="user_id"></span>
+                <div class="welcome-content">
+                    <div>Добро пожаловать, пользователь #<span id="user_id"></span></div>
+                    <button class="btn logout-btn" id="logout__btn">Выйти</button>
+                </div>
             </div>
         </div>
-        </main>
+    </main>
     <script src="task.js"></script>
 </body>
 </html>
